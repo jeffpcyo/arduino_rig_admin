@@ -204,6 +204,7 @@ void triggerPinOn(int pin, EthernetClient client){
 void triggerPinOff(int pin, EthernetClient client){
   if(secondExecution()) {
 //blink a pin - Client needed just for HTML output purposes.  
+  client.print("<p>Turning Off Rig </p>");
   client.println(pin);
   client.println("<br>");
 
