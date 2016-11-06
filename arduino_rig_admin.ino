@@ -52,7 +52,7 @@ void setup(){
 
 void loop(){
 
-  // listen for incoming clients, and process qequest.
+  // listen for incoming clients, and process request.
   checkForClient();
 
 }
@@ -175,9 +175,8 @@ void checkForClient(){
              else if(pageContent == 9){
               triggerPinOff(5, client);
              }
-             else {
               sensTemp(A0, client);
-             }
+             
           if(!sentFooter){
           client.println("</td></tr></table>");
 
@@ -193,7 +192,7 @@ void checkForClient(){
 void triggerPinOn(int pin, EthernetClient client){
   if(secondExecution()) {
 //blink a pin - Client needed just for HTML output purposes.  
-  client.print("<p>Turning on pin </p>");
+  client.print("<p>Turning on Rig </p>");
   client.println(pin);
   client.println("<br>");
 
