@@ -243,6 +243,24 @@ float temperatureF = (tempC * 9.0 / 5.0) + 32.0; // conversion to F
 return temperatureF;
 }
 
+void loop()
+{
+client.print( "GET /add.php?");
+client.print("ip=");
+client.print( ip );
+client.print("&");
+client.print("temp=");
+client.print( tempC );
+client.println( " HTTP/1.1");
+client.println( "Host: WEBSERVER_HERE" );
+client.println( "Content-Type: application/x-www-form-urlencoded" );
+client.println( "Connection: close" );
+client.println();
+client.println();
+client.stop();
+delay( 60 );
+}
+
 boolean secondExecution() {
   if(secondExe == false) {
     secondExe = true;
@@ -253,4 +271,5 @@ boolean secondExecution() {
 
  return secondExe;
 }
+
 
