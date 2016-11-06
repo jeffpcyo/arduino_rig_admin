@@ -1,6 +1,8 @@
 //ARDUINO 1.0+ ONLY
 //ARDUINO 1.0+ ONLY
-
+//Jeffpcyo & antho281
+// Temperature sensor and I/O Board
+// V0.0.2a BETA 
 
 #include <Ethernet.h>
 #include <SPI.h>
@@ -220,10 +222,10 @@ void sensTemp(int sensorPin, EthernetClient client){
         // Afficher la température
           client.print("<p>Temperature Ambiante: ");
           client.print(tempC);
-          client.print("*C</p><br />");
+          client.print("°C</p><br />");
           client.print("<p>Temperature Ambiante: ");
           client.print(tempF);
-          client.println("*F</p><br />");
+          client.println("°F</p><br />");
 }
 }
 
