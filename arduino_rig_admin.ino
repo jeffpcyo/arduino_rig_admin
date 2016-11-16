@@ -22,13 +22,16 @@ boolean secondExe = false;
 byte mac[] = {
   0x78, 0x4B, 0x87, 0xFE, 0x70, 0x56
 };
-byte ip[] = { 192, 168, 1, 177 }; // ip in lan
+/*byte ip[] = { 192, 168, 1, 177 }; // ip in lan
 byte gateway[] = { 192, 168, 1, 1 }; // internet access via router
 byte subnet[] = { 255, 255, 255, 0 }; //subnet mask
-//IPAddress ip(192, 168, 1, 177);
+//IPAddress ip(192, 168, 1, 177);*/
 
   EthernetServer server = EthernetServer(6979); //port 80
 ////////////////////////////////////////////////////////////////////////
+
+int TempPins[] = {A0};
+int TempPinsQty = 1;
 
 void setup(){
   Serial.begin(9600);
@@ -44,7 +47,8 @@ void setup(){
   pinMode(8, OUTPUT);
   pinMode(9, OUTPUT);
 
-    Ethernet.begin(mac, ip, gateway, subnet);
+//    Ethernet.begin(mac, ip, gateway, subnet);
+ Ethernet.begin(mac);
   //Ethernet.begin(mac, ip, gateway, subnet); //for manual setup
 
   server.begin();
@@ -70,24 +74,9 @@ void checkForClient(){
     // an http request ends with a blank line
     boolean currentLineIsBlank = true;
     boolean sentHeader = false;
+    boolean rssPage = false;
     boolean sentFooter = false;
-    
-        if(!sentHeader){
-          // send a standard http response header
-          client.println("HTTP/1.1 200 OK");
-          client.println("Content-Type: text/html");
-          client.println();
-
-
-        client.println("<table align='center' border='0'><tr id='Menu'><td><table border='1'><tr><th><a href='http://thepserv.com:6979/?'>Temp</th><th>Rig 1</th><th>Rig 2</th><th> !! EXECUTE !! </th></tr>");
-        client.println("<tr><td></td><td><a href='http://thepserv.com:6979/?2'>ON</a></td><td><a href='http://thepserv.com:6979/?4'>ON</a></td></tr>");
-        client.println("<tr><td></td><td><a href='http://thepserv.com:6979/?3'>OFF</a></td><td><a href='http://thepserv.com:6979/?5'>OFF</a></td></tr></table></td></tr>");
-        client.println("<tr id='content'><td>");
-
-        
-          sentHeader = true;
-        }
-        
+         
     while (client.connected()) {
       if (client.available()) {
 
@@ -100,6 +89,10 @@ void checkForClient(){
           Serial.print(c);
 
            switch (c) {
+            case 'r':
+              rssPage = true;
+              rssFeed(client);
+              break;
             case '2':
               //add code here to trigger on 2
               pageContent = 2;
@@ -152,7 +145,21 @@ void checkForClient(){
 
       }
     }
+        if(!sentHeader && !rssPage){
+          // send a standard http response header
+          client.println("HTTP/1.1 200 OK");
+          client.println("Content-Type: text/html");
+          client.println();
 
+
+        client.println("<table align='center' border='0'><tr id='Menu'><td><table border='1'><tr><th><a href='http://thepserv.com:6979/?'>Temp</th><th>Rig 1</th><th>Rig 2</th><th> !! EXECUTE !! </th></tr>");
+        client.println("<tr><td></td><td><a href='http://thepserv.com:6979/?2'>ON</a></td><td><a href='http://thepserv.com:6979/?4'>ON</a></td></tr>");
+        client.println("<tr><td></td><td><a href='http://thepserv.com:6979/?3'>OFF</a></td><td><a href='http://thepserv.com:6979/?5'>OFF</a></td></tr></table></td></tr>");
+        client.println("<tr id='content'><td>");
+
+        
+          sentHeader = true;
+        }
              if(pageContent == 2){
               triggerPinOn(2, client);
              }
@@ -177,9 +184,9 @@ void checkForClient(){
              else if(pageContent == 9){
               triggerPinOff(5, client);
              }
-              sensTemp(A0, client);
+             // sensTemp(A0, client);
              
-          if(!sentFooter){
+          if(!sentFooter && !rssPage){
           client.println("</td></tr></table>");
 
           sentFooter = true;
@@ -242,7 +249,39 @@ float tempC = ((v * analog_val) / 1024) * 100; // conversion to Celsius
 float temperatureF = (tempC * 9.0 / 5.0) + 32.0; // conversion to F
 return temperatureF;
 }
+void rssFeed(EthernetClient client){
+          // send a standard http response header
+          client.println("<?xml version='1.0'?>");
+          client.println("<rss version='2.0'>");
+          client.println("<channel>");
+          client.println();
 
+          for (int i=0; i < TempPinsQty; i++){
+
+            int sensorValue = analogRead(TempPins[i]); // getting input from analog pin 0
+        float tempC = modTempC(sensorValue); // converting input values from the temperature sensor
+        float tempF = modTempF(sensorValue); // converting input values from the temperature sensor
+         
+            client.print("<TempPinsQty>");
+            client.print(TempPinsQty);
+            client.println("</TempPinsQty>");
+            client.println("<item>");
+            client.print("<TempPin>");
+            client.print(TempPins[i]);
+            client.println("</TempPin>");
+            client.print("<tempC>");
+            client.print(tempC);
+            client.println("</tempC>");
+            client.print("<tempF>");
+            client.print(tempF);
+            client.println("</tempF>");
+            client.println("</item>");
+          }
+
+          client.println("</channel>");
+          client.println("</rss>");
+}
+/*
 void loop()
 {
 client.print( "GET /add.php?");
@@ -259,7 +298,7 @@ client.println();
 client.println();
 client.stop();
 delay( 60 );
-}
+}*/
 
 boolean secondExecution() {
   if(secondExe == false) {
