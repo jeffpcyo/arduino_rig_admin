@@ -152,9 +152,9 @@ void checkForClient(){
           client.println();
 
 
-        client.println("<table align='center' border='0'><tr id='Menu'><td><table border='1'><tr><th><a href='http://thepserv.com:6979/?'>Temp</th><th>Rig 1</th><th>Rig 2</th><th> !! EXECUTE !! </th></tr>");
-        client.println("<tr><td></td><td><a href='http://thepserv.com:6979/?2'>ON</a></td><td><a href='http://thepserv.com:6979/?4'>ON</a></td></tr>");
-        client.println("<tr><td></td><td><a href='http://thepserv.com:6979/?3'>OFF</a></td><td><a href='http://thepserv.com:6979/?5'>OFF</a></td></tr></table></td></tr>");
+        client.println("<table align='center' border='0'><tr id='Menu'><td><table border='1'><tr><th><a href='http://127.0.0.1.com:6979/?'>Temp</th><th>Rig 1</th><th>Rig 2</th><th> !! EXECUTE !! </th></tr>");
+        client.println("<tr><td></td><td><a href='http://127.0.0.1:6979/?2'>ON</a></td><td><a href='http://127.0.0.1:6979/?4'>ON</a></td></tr>");
+        client.println("<tr><td></td><td><a href='http://127.0.0.1:6979/?3'>OFF</a></td><td><a href='http://127.0.0.1:6979/?5'>OFF</a></td></tr></table></td></tr>");
         client.println("<tr id='content'><td>");
 
         
