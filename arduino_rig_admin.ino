@@ -251,9 +251,8 @@ return temperatureF;
 }
 void rssFeed(EthernetClient client){
           // send a standard http response header
-          client.println("<?xml version='1.0'?>");
-          client.println("<rss version='2.0'>");
-          client.println("<channel>");
+          client.println("<?xml version="1.0" encoding="UTF-8"?>");
+          client.println("<infos>");
           client.println();
 
           for (int i=0; i < TempPinsQty; i++){
@@ -278,8 +277,7 @@ void rssFeed(EthernetClient client){
             client.println("</item>");
           }
 
-          client.println("</channel>");
-          client.println("</rss>");
+          client.println("</infos>");
 }
 /*
 void loop()
