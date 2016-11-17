@@ -251,7 +251,7 @@ return temperatureF;
 }
 void rssFeed(EthernetClient client){
           // send a standard http response header
-          client.println("<?xml version="1.0" encoding="UTF-8"?>");
+          client.println("<?xml version='1.0' encoding='UTF-8'?>");
           client.println("<infos>");
           client.println();
 
